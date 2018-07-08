@@ -18,7 +18,7 @@ cd ..
 gcc main.c -lfoo -L./foo/target/debug/ -omain
 ```
 
-Run C program that used the Rust library:
+Run C program that uses the Rust library:
 ```
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./foo/target/debug
 ./main

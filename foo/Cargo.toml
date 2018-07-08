@@ -1,0 +1,11 @@
+[package]
+name = "foo"
+version = "0.1.0"
+authors = ["Moritz Warning <moritzwarning@web.de>"]
+
+[dependencies]
+failure = "0.1.1"
+
+[lib]
+name = "foo"
+crate-type = ["dylib"]

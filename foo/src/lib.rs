@@ -19,18 +19,18 @@ pub trait RandomAccessMethods {
 }
 
 struct Bar {
-	data: Vec<u8>
+  data: Vec<u8>
 }
 
 impl Bar {
-	fn new() -> Bar {
-		Bar{data: vec![]}
-	}
+  fn new() -> Bar {
+    Bar{data: vec![]}
+  }
 }
 
 impl RandomAccessMethods for Bar {
   fn open(&mut self) -> Result<(), Error> {
-  	Ok(())
+    Ok(())
   }
 
   /// Write bytes at an offset to the backend.
@@ -42,18 +42,18 @@ impl RandomAccessMethods for Bar {
 
   /// Read a sequence of bytes at an offset from the backend.
   fn read(&mut self, offset: usize, length: usize) -> Result<Vec<u8>, Error> {
-  	println!("read(offset: {}, length: {})", offset, length);
-  	if self.data.len() == length {
-  		Ok(self.data.to_owned())
-  	} else {
-  		Err(failure::err_msg("failure"))
-  	}
+    println!("read(offset: {}, length: {})", offset, length);
+    if self.data.len() == length {
+      Ok(self.data.to_owned())
+    } else {
+      Err(failure::err_msg("failure"))
+    }
   }
 
   /// Delete a sequence of bytes at an offset from the backend.
   fn del(&mut self, offset: usize, length: usize) -> Result<(), Error> {
-  	println!("del(offset: {}, length: {})", offset, length);
-  	Ok(())
+    println!("del(offset: {}, length: {})", offset, length);
+    Ok(())
   }
 }
 
@@ -73,26 +73,26 @@ fn dat_free(ptr: *mut RandomAccessMethods) {
 #[no_mangle]
 pub extern "C"
 fn dat_write(ptr: *mut RandomAccessMethods, offset: usize, length: usize, array: *const u8) -> i32 {
-	println!("dat_write()");
-	let array_slice = unsafe { std::slice::from_raw_parts(array, length) };
-	let obj = unsafe { &mut Box::from_raw(ptr) };
-	match obj.write(offset, array_slice) {
-		Ok(_) => 0,
- 		Err(_) => 1 
-	}
+  println!("dat_write()");
+  let array_slice = unsafe { std::slice::from_raw_parts(array, length) };
+  let obj = unsafe { &mut Box::from_raw(ptr) };
+  match obj.write(offset, array_slice) {
+    Ok(_) => 0,
+     Err(_) => 1
+  }
 }
 
 
 #[no_mangle]
 pub extern "C"
 fn dat_read(ptr: *mut RandomAccessMethods, offset: usize, length: usize, array: *mut u8) -> i32 {
-	println!("dat_read()");
-	let array_slice = unsafe { std::slice::from_raw_parts_mut(array, length) };
-	let obj = unsafe { &mut Box::from_raw(ptr) };
-	if let Ok(vec) = obj.read(offset, length) {
-		// Copy from vec into array
-		array_slice.copy_from_slice(&vec[..]);
-		return 0;
-	}
-	return 1;
+  println!("dat_read()");
+  let array_slice = unsafe { std::slice::from_raw_parts_mut(array, length) };
+  let obj = unsafe { &mut Box::from_raw(ptr) };
+  if let Ok(vec) = obj.read(offset, length) {
+    // Copy from vec into array
+    array_slice.copy_from_slice(&vec[..]);
+    return 0;
+  }
+  return 1;
 }

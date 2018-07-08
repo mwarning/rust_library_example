@@ -8,11 +8,11 @@ extern struct RandomAccessMethods *dat_new();
 extern void dat_free(struct RandomAccessMethods* ptr);
 
 extern void dat_write(
-	struct RandomAccessMethods *self, size_t offset, size_t length, const uint8_t* array
+  struct RandomAccessMethods *self, size_t offset, size_t length, const uint8_t* array
 );
 
 extern void dat_read(
-	struct RandomAccessMethods *self, size_t offset, size_t length, uint8_t* array
+  struct RandomAccessMethods *self, size_t offset, size_t length, uint8_t* array
 );
 
 
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
   // print out data
   for (int i = 0; i < 6; i++) {
-  	printf("%d ", (int) out_data[i]);
+    printf("%d ", (int) out_data[i]);
   }
   printf("\n");
 

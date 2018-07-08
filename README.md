@@ -26,3 +26,4 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./foo/target/debug
 
 Useful Links:
 * http://siciarz.net/24-days-of-rust-calling-rust-from-other-languages/
+* http://jakegoulding.com/rust-ffi-omnibus/objects/

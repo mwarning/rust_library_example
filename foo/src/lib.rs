@@ -64,31 +64,33 @@ fn dat_new() -> *mut RandomAccessMethods {
 }
 
 #[no_mangle]
-pub extern "C"
+pub unsafe extern "C"
 fn dat_free(ptr: *mut RandomAccessMethods) {
-  if ptr.is_null() { return }
-  unsafe { Box::from_raw(ptr); }
+  drop(Box::from_raw(ptr));
 }
 
 #[no_mangle]
-pub extern "C"
+pub unsafe extern "C"
 fn dat_write(ptr: *mut RandomAccessMethods, offset: usize, length: usize, array: *const u8) -> i32 {
-  println!("dat_write()");
-  let array_slice = unsafe { std::slice::from_raw_parts(array, length) };
-  let obj = unsafe { &mut Box::from_raw(ptr) };
+  println!("dat_write(ptr: {:p}), offset: {}, length: {}, array: {:p}", ptr, offset, length, array);
+
+  let obj =  &mut *ptr;
+  let array_slice = std::slice::from_raw_parts(array, length);
+
   match obj.write(offset, array_slice) {
     Ok(_) => 0,
-     Err(_) => 1
+    Err(_) => 1
   }
 }
 
 
 #[no_mangle]
-pub extern "C"
+pub unsafe extern "C"
 fn dat_read(ptr: *mut RandomAccessMethods, offset: usize, length: usize, array: *mut u8) -> i32 {
   println!("dat_read()");
-  let array_slice = unsafe { std::slice::from_raw_parts_mut(array, length) };
-  let obj = unsafe { &mut Box::from_raw(ptr) };
+  let obj = &mut *ptr;
+  let array_slice = std::slice::from_raw_parts_mut(array, length);
+
   if let Ok(vec) = obj.read(offset, length) {
     // Copy from vec into array
     array_slice.copy_from_slice(&vec[..]);
